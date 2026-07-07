@@ -5,6 +5,8 @@
 ![YOLO](https://img.shields.io/badge/YOLO-Ultralytics-green)
 ![SQLite](https://img.shields.io/badge/SQLite-Database-blue)
 ![Docker](https://img.shields.io/badge/Docker-Ready-2496ED)
+![MIT]!(https://img.shields.io/badge/MIT%20License)
+
 
 Automatic Belote card recognition and scoring application based on **Deep Learning** and **Software Engineering** principles.
 
