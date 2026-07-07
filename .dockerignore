@@ -1,0 +1,28 @@
+# Heavy datasets / models
+data/
+src/database/*.db
+src/database/*.sqlite
+src/database/*.sqlite3
+models/
+archives/
+*.pt
+*.onnx
+*.engine
+*.torchscript
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+
+# Streamlit / local
+.streamlit/secrets.toml
+.git
+.gitignore
+
+# OS / IDE
+.DS_Store
+.vscode/
+.idea/

@@ -1,0 +1,19 @@
+credentials:
+  usernames:
+    admin:
+      email: admin@example.com
+      name: Admin
+      password: "$2b$12$6pz73YCYlqH5d3lK7Ww/oeb5GyZ/4mim9mOYqne04oh9N.s3X9eL."
+
+    test:
+      email: test123@example.com
+      name: Test User
+      password: "$2b$12$NYLO.BMHEZZA4B3pnOXJnuTWdRHMSv3s7TB1xCbEzqJm.HRi0As4e"
+
+cookie:
+  name: belote_app_auth
+  key: "CHANGE_ME_RANDOM_SECRET_KEY"
+  expiry_days: 7
+
+preauthorized:
+  emails: []

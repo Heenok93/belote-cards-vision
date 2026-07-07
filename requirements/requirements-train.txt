@@ -1,0 +1,17 @@
+# General
+matplotlib
+seaborn
+
+# Data acquisition
+kaggle==1.5.12
+datasets>=2.18.0
+roboflow>=1.1.0
+
+# Data processing
+torch
+torchvision
+scikit-learn
+albumentations
+xgboost
+lightgbm
+catboost

@@ -1,0 +1,22 @@
+services:
+  belote-app:
+    build: .
+    container_name: belote-card-vision-dev
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./main.py:/app/main.py
+      - ./utils.py:/app/utils.py
+      - ./src:/app/src
+      - ./models:/app/models:ro
+      - ./config:/app/config      
+    environment:
+      - STREAMLIT_SERVER_ADDRESS=0.0.0.0
+      - STREAMLIT_SERVER_PORT=8501
+      - STREAMLIT_SERVER_RUN_ON_SAVE=true
+      - STREAMLIT_SERVER_FILE_WATCHER_TYPE=auto
+    command: >
+      streamlit run main.py
+      --server.address=0.0.0.0
+      --server.port=8501
+      --server.runOnSave=true
