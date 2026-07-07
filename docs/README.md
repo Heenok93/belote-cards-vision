@@ -6,7 +6,7 @@
 ![SQLite](https://img.shields.io/badge/SQLite-Database-blue)
 ![Docker](https://img.shields.io/badge/Docker-Ready-2496ED)
 ![License](https://img.shields.io/badge/license-MIT-orange.svg?style=flat)
-![GitHub last commit](https://img.shields.io/github/last-commit/(https://github.com/Heenok93/belote-cards-vision))
+![GitHub last commit](https://img.shields.io/github/last-commit/[Heenok93/belote-cards-vision](https://github.com/Heenok93/belote-cards-vision))
 
 
 Automatic Belote card recognition and scoring application based on **Deep Learning** and **Software Engineering** principles.
