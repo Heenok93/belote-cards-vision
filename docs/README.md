@@ -242,6 +242,16 @@ This project was developed following Software Engineering best practices:
 
 ---
 
+## Code Quality
+
+The project uses modern Python quality assurance tools:
+
+- **Ruff** for linting and static code analysis
+- **MyPy** for static type checking
+- **pytest** for unit testing
+
+These tools help maintain a clean, maintainable and robust codebase.
+
 # 📜 License
 
 This project is distributed under the MIT License.
