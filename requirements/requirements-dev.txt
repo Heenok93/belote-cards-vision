@@ -1,0 +1,10 @@
+-r requirements/requirements.txt
+
+#code linting and checks
+ruff
+mypy
+pytest
+coverage
+
+types-PyYAML
+pandas-stubs
