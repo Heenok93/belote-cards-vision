@@ -59,23 +59,81 @@ SQLite database
 # 🏗 Project Architecture
 
 ```text
-belote-cards-vision
+belote-cards-vision/
 │
 ├── config/
-├── models/
+│   ├── __init__.py
+│   ├── settings.py                # Configuration générale
+│   └── constants.py               # Constantes globales de l'application
+│
+├── docs/
+│
+├── models/                        # Modèles YOLO
 │
 ├── src/
+│   │
+│   ├── __init__.py
+│   │
 │   ├── assets/
+│   │
+│   ├── core/
+│   │   ├── __init__.py
+│   │   ├── router.py              # Navigation de l'application
+│   │   ├── session.py             # Gestion de la session Streamlit
+│   │   └── exceptions.py          # Exceptions personnalisées
+│   │
 │   ├── database/
+│   │   ├── __init__.py
+│   │   ├── app.db
+│   │   ├── schema.py              # Création / initialisation de la base
+│   │   └── repositories.py        # CRUD SQLite
+│   │
 │   ├── game/
+│   │   └── belote/
+│   │       ├── __init__.py
+│   │       ├── cards.py
+│   │       ├── constants.py
+│   │       ├── generator.py
+│   │       ├── rules.py
+│   │       └── scoring.py
+│   │
 │   ├── services/
+│   │   ├── __init__.py
+│   │   ├── auth_service.py
+│   │   ├── database_service.py
+│   │   ├── inference_service.py
+│   │   ├── image_preprocessing_service.py
+│   │   └── image_quality_service.py
+│   │
 │   └── views/
+│       ├── __init__.py
+│       │
+│       ├── pages/
+│       │   ├── home.py
+│       │   ├── upload.py
+│       │   ├── game_analysis.py
+│       │   ├── leaderboard.py
+│       │   └── conclusion.py
+│       │
+│       └── components/
+│           ├── __init__.py
+│           ├── quality_panel.py
+│           ├── detection_panel.py
+│           ├── correction_panel.py
+│           ├── scoring_panel.py
+│           └── save_panel.py
+│
+├── tests/
 │
 ├── Dockerfile
 ├── docker-compose.yml
 ├── docker-compose.dev.yml
+│
 ├── main.py
+│
 ├── requirements.txt
+├── requirements-dev.txt
+│
 └── README.md
 ```
 
