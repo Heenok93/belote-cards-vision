@@ -1,12 +1,10 @@
 """
 Application router.
 
-Centralise la navigation entre les différentes pages Streamlit.
+Resolves the current route and renders the corresponding page.
 """
 
 from collections.abc import Callable
-
-import streamlit as st
 
 from src.views.pages import (
     conclusion,
@@ -16,41 +14,34 @@ from src.views.pages import (
     upload,
 )
 
+from utils import get_route
+
+
 # =============================================================================
 # Route registry
 # =============================================================================
 
 ROUTES: dict[str, Callable[[], None]] = {
-    "home": home.load_view,
-    "upload": upload.load_view,
-    "analysis": game_analysis.load_view,
-    "leaderboard": leaderboard.load_view,
-    "conclusion": conclusion.load_view,
+    "/home": home.load_view,
+    "/upload": upload.load_view,
+    "/analysis": game_analysis.load_view,
+    "/leaderboard": leaderboard.load_view,
+    "/conclusion": conclusion.load_view,
 }
 
 
 # =============================================================================
-# Navigation
+# Public API
 # =============================================================================
 
-def navigate(page: str) -> None:
-    """Navigate to another page."""
-
-    if page not in ROUTES:
-        raise ValueError(f"Unknown route: {page}")
-
-    st.session_state.current_page = page
-
-
-def current_page() -> str:
-    """Return the current page."""
-
-    return st.session_state.get("current_page", "home")
-
-
 def render_current_page() -> None:
-    """Render the current page."""
+    """Render the page matching the current route."""
 
-    page = current_page()
+    route = get_route()
 
-    ROUTES.get(page, home.load_view)()
+    page = ROUTES.get(
+        route,
+        home.load_view,
+    )
+
+    page()
