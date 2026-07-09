@@ -1,20 +1,17 @@
 import json
 import sqlite3
-from pathlib import Path
 from datetime import datetime
 
-from config.settings import (
-    DEFAULT_MODEL_PATH
-)
+from config.settings import DATABASE_PATH
 
-def get_connection():
-    DEFAULT_MODEL_PATH.parent.mkdir(parents=True, exist_ok=True)
-    conn = sqlite3.connect(DEFAULT_MODEL_PATH)
+def get_connection() -> sqlite3.Connection:
+    DATABASE_PATH.parent.mkdir(parents=True, exist_ok=True)
+    conn = sqlite3.connect(DATABASE_PATH)
     conn.row_factory = sqlite3.Row
     return conn
 
 
-def init_db():
+def init_db() -> None:
     with get_connection() as conn:
         conn.execute(
             """
@@ -85,7 +82,10 @@ def migrate_rounds_table(conn):
             )
 
 
-def create_game(team_1_name="Equipe 1", team_2_name="Equipe 2"):
+def create_game(
+    team_1_name: str = "Equipe 1",
+    team_2_name: str = "Equipe 2",
+) -> int:
     now = datetime.now().isoformat(timespec="seconds")
 
     with get_connection() as conn:
@@ -106,7 +106,7 @@ def create_game(team_1_name="Equipe 1", team_2_name="Equipe 2"):
         return cursor.lastrowid
 
 
-def get_game(game_id: int):
+def get_game(game_id: int) -> dict | None:
     with get_connection() as conn:
         row = conn.execute(
             """

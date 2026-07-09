@@ -4,9 +4,6 @@ import os
 
 from ultralytics import YOLO
 
-from src.game.belote.cards import parse_card, Suit
-from src.game.belote.scoring import compute_score, TrumpMode
-
 from config.settings import (
     DEFAULT_CONFIDENCE,
     DEFAULT_IMAGE_SIZE,
@@ -14,12 +11,24 @@ from config.settings import (
     DEFAULT_MODEL_PATH,
 )
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
+from src.game.belote.cards import Suit, parse_card
+from src.game.belote.scoring import TrumpMode, compute_score
 
-_model = None
+
+# =============================================================================
+# Model cache
+# =============================================================================
+
+_model: YOLO | None = None
 
 
-def get_model(model_path: Path = DEFAULT_MODEL_PATH):
+# =============================================================================
+# Model loading
+# =============================================================================
+
+def get_model(model_path: Path = DEFAULT_MODEL_PATH) -> YOLO:
+    """Load the YOLO model only once."""
+
     global _model
 
     if not model_path.exists():
@@ -31,19 +40,30 @@ def get_model(model_path: Path = DEFAULT_MODEL_PATH):
     return _model
 
 
+# =============================================================================
+# Detection post-processing
+# =============================================================================
+
 def deduplicate_detections_by_label(detections: list[dict]) -> list[dict]:
+    """Keep only the highest-confidence detection for each card label."""
+
     best_by_label = {}
 
     for detection in detections:
         label = detection["label"]
 
-        if label not in best_by_label:
-            best_by_label[label] = detection
-        elif detection["confidence"] > best_by_label[label]["confidence"]:
+        if (
+            label not in best_by_label
+            or detection["confidence"] > best_by_label[label]["confidence"]
+        ):
             best_by_label[label] = detection
 
     return list(best_by_label.values())
 
+
+# =============================================================================
+# Image analysis
+# =============================================================================
 
 def analyze_image(
     image_bytes: bytes,
@@ -51,18 +71,20 @@ def analyze_image(
     trump_suit: Suit | None = None,
     dix_de_der: bool = False,
     include_belote_rebelote: bool = True,
-    conf: float = DEFAULT_CONFIDENCE,
-    imgsz: int = DEFAULT_IMAGE_SIZE,
+    confidence: float = DEFAULT_CONFIDENCE,
+    image_size: int = DEFAULT_IMAGE_SIZE,
     iou: float = DEFAULT_IOU,
     deduplicate: bool = True,
 ) -> dict:
+    """Run YOLO inference and compute the Belote score."""
+
     model = get_model()
     image_path = None
 
     if trump_mode == TrumpMode.CLASSIC and trump_suit is None:
         raise ValueError("trump_suit est obligatoire en mode CLASSIC.")
 
-    if trump_mode in {TrumpMode.ALL_TRUMP, TrumpMode.NO_TRUMP}:
+    if trump_mode is not TrumpMode.CLASSIC:
         trump_suit = None
 
     try:
@@ -72,8 +94,8 @@ def analyze_image(
 
         results = model.predict(
             source=image_path,
-            imgsz=imgsz,
-            conf=conf,
+            imgsz=image_size,
+            conf=confidence,
             iou=iou,
             save=False,
             verbose=False,
@@ -86,21 +108,21 @@ def analyze_image(
 
         for box in result.boxes:
             class_id = int(box.cls[0])
-            confidence = float(box.conf[0])
+            score = float(box.conf[0])
             label = names[class_id]
             x1, y1, x2, y2 = box.xyxy[0].tolist()
 
             try:
                 card = parse_card(label)
                 valid = True
-            except Exception:
+            except ValueError:
                 card = None
                 valid = False
 
             detections.append(
                 {
                     "label": label,
-                    "confidence": confidence,
+                    "confidence": score,
                     "bbox": [x1, y1, x2, y2],
                     "card": card,
                     "valid": valid,
@@ -138,8 +160,8 @@ def analyze_image(
                 "trump_suit": trump_suit.value if trump_suit else None,
                 "dix_de_der": dix_de_der,
                 "include_belote_rebelote": include_belote_rebelote,
-                "conf": conf,
-                "imgsz": imgsz,
+                "confidence": confidence,
+                "image_size": image_size,
                 "iou": iou,
                 "deduplicate": deduplicate,
             },
