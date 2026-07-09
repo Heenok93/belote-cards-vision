@@ -6,6 +6,8 @@ Resolves the current route and renders the corresponding page.
 
 from collections.abc import Callable
 
+import streamlit as st
+
 from src.views.pages import (
     conclusion,
     game_analysis,
@@ -13,9 +15,6 @@ from src.views.pages import (
     leaderboard,
     upload,
 )
-
-from utils import get_route
-
 
 # =============================================================================
 # Route registry
@@ -29,11 +28,22 @@ ROUTES: dict[str, Callable[[], None]] = {
     "/conclusion": conclusion.load_view,
 }
 
+# =============================================================================
+# Route helpers
+# =============================================================================
+
+def get_route() -> str:
+    """Return the current application route."""
+
+    page = st.query_params.get("page", "home")
+    return f"/{page}"
+
 
 # =============================================================================
 # Public API
 # =============================================================================
 
+C'est plus homogène avec le reste du pro
 def render_current_page() -> None:
     """Render the page matching the current route."""
 
