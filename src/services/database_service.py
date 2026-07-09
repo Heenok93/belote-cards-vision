@@ -3,13 +3,13 @@ import sqlite3
 from pathlib import Path
 from datetime import datetime
 
-
-DB_PATH = Path("src/database/app.db")
-
+from config.settings import (
+    DEFAULT_MODEL_PATH
+)
 
 def get_connection():
-    DB_PATH.parent.mkdir(parents=True, exist_ok=True)
-    conn = sqlite3.connect(DB_PATH)
+    DEFAULT_MODEL_PATH.parent.mkdir(parents=True, exist_ok=True)
+    conn = sqlite3.connect(DEFAULT_MODEL_PATH)
     conn.row_factory = sqlite3.Row
     return conn
 

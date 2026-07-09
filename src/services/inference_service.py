@@ -7,9 +7,14 @@ from ultralytics import YOLO
 from src.game.belote.cards import parse_card, Suit
 from src.game.belote.scoring import compute_score, TrumpMode
 
+from config.settings import (
+    DEFAULT_CONFIDENCE,
+    DEFAULT_IMAGE_SIZE,
+    DEFAULT_IOU,
+    DEFAULT_MODEL_PATH,
+)
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_MODEL_PATH = PROJECT_ROOT / "models" / "vision" / "YOLO26_finetuned_best.pt"
 
 _model = None
 
@@ -46,9 +51,9 @@ def analyze_image(
     trump_suit: Suit | None = None,
     dix_de_der: bool = False,
     include_belote_rebelote: bool = True,
-    conf: float = 0.25,
-    imgsz: int = 1024,
-    iou: float = 0.65,
+    conf: float = DEFAULT_CONFIDENCE,
+    imgsz: int = DEFAULT_IMAGE_SIZE,
+    iou: float = DEFAULT_IOU,
     deduplicate: bool = True,
 ) -> dict:
     model = get_model()
