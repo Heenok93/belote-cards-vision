@@ -131,11 +131,11 @@ def render_detection_panel(
                 "mode": preprocessing_mode,
             }
 
-        if "analysis_result" not in st.session_state:
+        result = st.session_state.get("analysis_result")
+
+        if result is None:
             return None
-
-        result = st.session_state.analysis_result
-
+        
         _render_detection_metrics(result)
 
         preprocessing_info = st.session_state.get(

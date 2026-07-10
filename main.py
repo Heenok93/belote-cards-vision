@@ -10,7 +10,6 @@ import utils as utl
 
 from src.core.router import render_current_page
 from src.core.session import initialize_session
-from src.core.navigation import redirect, get_route
 
 from src.services.auth_service import (
     require_authentication,

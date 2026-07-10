@@ -4,7 +4,7 @@ Upload page.
 
 import streamlit as st
 
-from src.core.navigation import redirect, get_route
+from src.core.navigation import redirect
 
 def load_view() -> None:
     """Render the upload page."""
