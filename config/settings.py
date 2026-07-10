@@ -19,7 +19,7 @@ AUTH_CONFIG_PATH = PROJECT_ROOT / "config" / "auth_config.yaml"
 # Database
 # =============================================================================
 
-DATABASE_PATH = DATABASE_DIR / "app.db"
+DATABASE_PATH = PROJECT_ROOT / "database" / "app.db"
 
 # =============================================================================
 # YOLO model

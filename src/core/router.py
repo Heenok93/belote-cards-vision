@@ -29,21 +29,9 @@ ROUTES: dict[str, Callable[[], None]] = {
 }
 
 # =============================================================================
-# Route helpers
-# =============================================================================
-
-def get_route() -> str:
-    """Return the current application route."""
-
-    page = st.query_params.get("page", "home")
-    return f"/{page}"
-
-
-# =============================================================================
 # Public API
 # =============================================================================
 
-C'est plus homogène avec le reste du pro
 def render_current_page() -> None:
     """Render the page matching the current route."""
 

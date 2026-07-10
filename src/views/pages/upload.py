@@ -1,26 +1,47 @@
+"""
+Upload page.
+"""
+
 import streamlit as st
-from src.router import redirect
 
+from src.core.navigation import get_route
 
-def load_view():
-    st.title("📤 Upload de partie")
+def load_view() -> None:
+    """Render the upload page."""
 
-    st.markdown(
-        "Ajoutez une photo de cartes afin de lancer l'analyse automatique."
+    st.title("📤 Upload")
+
+    st.write(
+        "Charge une photographie des cartes afin de lancer l'analyse."
     )
 
     uploaded_file = st.file_uploader(
-        "Choisissez une image",
-        type=["png", "jpg", "jpeg"]
+        "Choisir une image",
+        type=["jpg", "jpeg", "png"],
     )
 
-    if uploaded_file is not None:
-        st.session_state["uploaded_image_bytes"] = uploaded_file.getvalue()
-        st.session_state["uploaded_image_name"] = uploaded_file.name
+    if uploaded_file is None:
 
-        st.image(uploaded_file, caption="Image chargée", use_container_width=True)
+        st.info(
+            "Sélectionne une image pour continuer."
+        )
 
-        if st.button("Lancer l'analyse"):
-            redirect("analysis", reload=True)
-    else:
-        st.info("Chargez une image pour activer l'analyse.")
+        return
+
+    image_bytes = uploaded_file.read()
+
+    st.session_state.uploaded_image = image_bytes
+
+    st.image(
+        image_bytes,
+        caption=uploaded_file.name,
+        use_container_width=True,
+    )
+
+    if st.button(
+        "Analyser cette image",
+        type="primary",
+        use_container_width=True,
+    ):
+
+        redirect("analysis")
