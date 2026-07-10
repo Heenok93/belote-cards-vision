@@ -12,6 +12,7 @@ DEFAULT_SESSION = {
 
     # Current game
     "game_id": None,
+    "last_round_saved": False,
 
     # Uploaded image
     "uploaded_image": None,
@@ -49,3 +50,5 @@ def reset_analysis() -> None:
 
     st.session_state.uploaded_image = None
     st.session_state.quality_report = None
+
+    st.session_state.last_round_saved = False

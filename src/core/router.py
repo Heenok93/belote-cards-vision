@@ -8,6 +8,8 @@ from collections.abc import Callable
 
 import streamlit as st
 
+from src.core.navigation import get_route
+
 from src.views.pages import (
     conclusion,
     game_analysis,

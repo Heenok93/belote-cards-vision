@@ -6,6 +6,9 @@ Validates and persists the corrected Belote round.
 
 import streamlit as st
 
+from src.core.navigation import redirect
+from src.core.session import reset_analysis
+
 from src.services.database_service import (
     get_current_game,
     get_score_totals,
@@ -26,33 +29,22 @@ def render_save_panel(
     """
 
     st.divider()
-
-    st.subheader(
-        "Enregistrer la manche"
-    )
+    st.subheader("💾 Enregistrer la manche")
 
     game = get_current_game()
 
     photographed_team = st.radio(
         "Equipe photographiée",
-        [
-            "Equipe 1",
-            "Equipe 2",
-        ],
+        ["Equipe 1", "Equipe 2"],
         horizontal=True,
     )
 
     photographed_team_won = (
-
         st.radio(
             "Cette équipe a gagné la manche ?",
-            [
-                "Oui",
-                "Non",
-            ],
+            ["Oui", "Non"],
             horizontal=True,
         )
-
         == "Oui"
     )
 
@@ -81,67 +73,60 @@ def render_save_panel(
         winning_team = opponent_team
         winning_score = 162 - photographed_score
 
-    st.write(
-        "Score qui sera enregistré :"
-    )
+    st.write("**Score qui sera enregistré**")
 
     st.metric(
         winning_team,
         winning_score,
     )
 
-    # -------------------------------------------------------------
+    # -------------------------------------------------------------------------
     # Validation
-    # -------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     score_is_valid = True
 
     if photographed_score < 0:
 
-        st.error(
-            "Score impossible."
-        )
-
+        st.error("Score impossible.")
         score_is_valid = False
 
     if photographed_score > 162:
 
         st.warning(
-            "Score supérieur à 162. "
-            "Vérifie les corrections."
+            "Le score photographié dépasse 162 points."
         )
 
     if winning_score < 0:
 
-        st.error(
-            "Le score gagnant est négatif."
-        )
-
+        st.error("Le score gagnant est négatif.")
         score_is_valid = False
 
     if winning_score > 182:
 
-        st.error(
-            "Le score dépasse 182."
-        )
-
+        st.error("Le score gagnant dépasse 182.")
         score_is_valid = False
 
     if winning_score < 82:
 
         st.warning(
-            "Le score gagnant est inférieur à 82."
+            "Le score gagnant est inférieur à 82 points."
         )
 
-    # -------------------------------------------------------------
+    # -------------------------------------------------------------------------
     # Save
-    # -------------------------------------------------------------
+    # -------------------------------------------------------------------------
+
+    already_saved = st.session_state.get(
+        "last_round_saved",
+        False,
+    )
 
     if st.button(
-        "Enregistrer cette manche",
+        "💾 Enregistrer cette manche",
         type="primary",
         use_container_width=True,
-        disabled=not score_is_valid,
+        disabled=(not score_is_valid) or already_saved,
     ):
 
         rules = correction_result["rules"]
@@ -151,17 +136,13 @@ def render_save_panel(
             game_id=game["id"],
 
             winning_team_name=winning_team,
-
             winning_score=winning_score,
 
             photographed_team_name=photographed_team,
-
             photographed_team_won=photographed_team_won,
-
             photographed_team_score=photographed_score,
 
             raw_score=raw_score,
-
             corrected_score=photographed_score,
 
             cards=correction_result[
@@ -187,38 +168,52 @@ def render_save_panel(
             ],
         )
 
+        st.session_state.last_round_saved = True
+
+    # -------------------------------------------------------------------------
+    # Post-save workflow
+    # -------------------------------------------------------------------------
+
+    if st.session_state.get("last_round_saved", False):
+
+        totals = get_score_totals(game["id"])
+
         st.success(
-            f"Manche enregistrée : "
-            f"{winning_team} marque "
-            f"{winning_score} points."
+            f"✅ Manche enregistrée.\n\n"
+            f"**{winning_team}** marque **{winning_score} points**."
         )
 
-    # -------------------------------------------------------------
-    # Running score
-    # -------------------------------------------------------------
+        st.info(
+            f"""
+### Score actuel
 
-    totals = get_score_totals(
-        game["id"]
-    )
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-
-        st.metric(
-            "Equipe 1",
-            totals.get(
-                "Equipe 1",
-                0,
-            ),
+- **Equipe 1 :** {totals.get("Equipe 1", 0)} points
+- **Equipe 2 :** {totals.get("Equipe 2", 0)} points
+"""
         )
 
-    with col2:
+        col1, col2 = st.columns(2)
 
-        st.metric(
-            "Equipe 2",
-            totals.get(
-                "Equipe 2",
-                0,
-            ),
-        )
+        with col1:
+
+            if st.button(
+                "📸 Nouvelle manche",
+                use_container_width=True,
+            ):
+
+                st.session_state.last_round_saved = False
+
+                reset_analysis()
+
+                redirect("upload")
+
+        with col2:
+
+            if st.button(
+                "🏆 Tableau des scores",
+                use_container_width=True,
+            ):
+
+                st.session_state.last_round_saved = False
+
+                redirect("leaderboard")

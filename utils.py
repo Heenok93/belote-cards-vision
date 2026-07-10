@@ -49,11 +49,3 @@ def navbar_component() -> None:
         if st.button("🔮 Perspectives", use_container_width=True):
             st.query_params["page"] = "conclusion"
             st.rerun()
-
-
-def get_route() -> str:
-    """Return the current route."""
-
-    page = st.query_params.get("page", "home")
-
-    return f"/{page}"

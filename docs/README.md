@@ -1,4 +1,4 @@
-# 🃏 Belote Cards Vision
+# 🃏 French Belote Cards Vision
 
 ![Python](https://img.shields.io/badge/Python-3.11-blue)
 ![Streamlit](https://img.shields.io/badge/Streamlit-1.x-red)
@@ -8,9 +8,9 @@
 ![License](https://img.shields.io/badge/license-MIT-orange.svg?style=flat)
 ![GitHub last commit](https://img.shields.io/github/last-commit/Heenok93/belote-cards-vision)
 
-Automatic Belote card recognition and scoring application based on **Deep Learning** and **Software Engineering** principles.
+Automatic French Belote card recognition and scoring application based on **Deep Learning** and **Software Engineering** principles.
 
-The application analyses a photo of a Belote hand, detects the cards using a fine-tuned YOLO model, computes the score according to official Belote rules, allows manual corrections and stores game results in a local SQLite database.
+The application analyses a photo of a French Belote hand, detects the cards using a fine-tuned YOLO model, computes the score according to official Belote rules, allows manual corrections and stores game results in a local SQLite database.
 
 ---
 
@@ -21,8 +21,8 @@ The application analyses a photo of a Belote hand, detects the cards using a fin
 - 🔍 Automatic image quality assessment
 - 🎨 Optional image preprocessing
 - 🤖 Automatic card detection using YOLO
-- ♠ Belote score computation
-- ✏ Manual card correction
+-  ♠  French Belote score computation
+-  ✏ Manual card correction
 - 🏆 Game score management
 - 💾 SQLite persistence
 - 📱 Responsive interface (desktop & mobile)
@@ -33,25 +33,33 @@ The application analyses a photo of a Belote hand, detects the cards using a fin
 # 📸 Application Workflow
 
 ```text
-Upload image
-      │
-      ▼
-Image quality diagnosis
-      │
-      ▼
-Optional preprocessing
-      │
-      ▼
-YOLO detection
-      │
-      ▼
-Manual correction
-      │
-      ▼
-Belote scoring engine
-      │
-      ▼
-SQLite database
+Accueil
+   │
+   ▼
+Upload photo
+   │
+   ▼
+Analyse IA
+   │
+   ▼
+Correction éventuelle
+   │
+   ▼
+Sauvegarder la manche
+   │
+   ▼
+┌────────────────────────────────────┐
+│ Nouvelle manche  │  Tableau scores │
+└────────────────────────────────────┘
+          │                  │
+          ▼                  ▼
+      Upload             Leaderboard
+                             │
+                             ▼
+                    Terminer la partie
+                             │
+                             ▼
+                          Accueil
 ```
 
 ---
