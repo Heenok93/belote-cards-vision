@@ -5,6 +5,8 @@ ruff
 mypy
 pytest
 coverage
+pytest-cov
+
 
 types-PyYAML
 pandas-stubs

@@ -1,3 +1,7 @@
 ruff check .
+
 mypy src
-pytest
+
+python -m compileall .
+
+pytest -v
