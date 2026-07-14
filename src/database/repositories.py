@@ -327,27 +327,3 @@ def delete_round(
             """,
             (round_id,),
         )
-
-
-# =============================================================================
-# Statistics
-# =============================================================================
-
-def get_score_totals(
-    game_id: int,
-) -> dict[str, int]:
-    """Return cumulative scores."""
-
-    totals: dict[str, int] = {}
-
-    for row in get_rounds(game_id):
-
-        team = row["winning_team_name"]
-
-        totals.setdefault(team, 0)
-
-        totals[team] += int(
-            row["winning_score"]
-        )
-
-    return totals

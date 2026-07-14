@@ -42,3 +42,33 @@ SUPPORTED_IMAGE_EXTENSIONS = (
 )
 
 MAX_UPLOAD_SIZE = 10 * 1024 * 1024  # 10 MB
+
+# =============================================================================
+# Dashboard UI
+# =============================================================================
+
+SCORE_SUMMARY_TITLE = "🏆 Score actuel"
+
+APPLICATION_STATISTICS_TITLE = "📊 Statistiques"
+
+TOTAL_GAMES_LABEL = "Parties"
+
+COMPLETED_GAMES_LABEL = "Terminées"
+
+ACTIVE_GAMES_LABEL = "En cours"
+
+TOTAL_ROUNDS_LABEL = "Manches"
+
+DETECTED_CARDS_LABEL = "Cartes détectées"
+
+AVERAGE_SCORE_LABEL = "Score moyen"
+
+RECENT_GAMES_TITLE = "🕘 Parties récentes"
+
+MODEL_INFORMATION_TITLE = "🤖 Modèle IA"
+
+LEADER_LABEL = "Leader"
+
+DIFFERENCE_LABEL = "Écart"
+
+ROUNDS_LABEL = "Manches"

@@ -14,12 +14,23 @@ from src.database.repositories import (
     get_current_game as repository_get_current_game,
     get_game as repository_get_game,
     get_rounds as repository_get_rounds,
-    get_score_totals as repository_get_score_totals,
     save_round,
     update_round as repository_update_round,
 )
 
 from src.database.schema import initialize_schema
+
+from src.database.statistics_repository import (
+    get_average_round_score as repository_get_average_round_score,
+    get_completed_games_count as repository_get_completed_games_count,
+    get_current_game_summary as repository_get_current_game_summary,
+    get_detected_cards_count as repository_get_detected_cards_count,
+    get_games_count as repository_get_games_count,
+    get_recent_games as repository_get_recent_games,
+    get_rounds_count as repository_get_rounds_count,
+    get_score_totals as repository_get_score_totals,
+    get_active_games_count as repository_get_active_games_count,
+)
 
 
 # =============================================================================
@@ -127,6 +138,62 @@ def delete_round(
 # Statistics
 # =============================================================================
 
+def get_games_count() -> int:
+    """Return the total number of games."""
+
+    return repository_get_games_count()
+
+
+def get_completed_games_count() -> int:
+    """Return the number of completed games."""
+
+    return repository_get_completed_games_count()
+
+
+def get_active_games_count() -> int:
+    """Return the number of active games."""
+
+    return repository_get_active_games_count()
+
+
+def get_rounds_count() -> int:
+    """Return the total number of rounds."""
+
+    return repository_get_rounds_count()
+
+
+def get_detected_cards_count() -> int:
+    """Return the total number of detected cards."""
+
+    return repository_get_detected_cards_count()
+
+
+def get_average_round_score() -> float:
+    """Return the average winning score."""
+
+    return repository_get_average_round_score()
+
+
+def get_recent_games(
+    limit: int = 5,
+) -> list[dict]:
+    """Return the most recent games."""
+
+    return repository_get_recent_games(
+        limit,
+    )
+
+
+def get_current_game_summary(
+    game_id: int,
+) -> dict:
+    """Return dashboard information for one game."""
+
+    return repository_get_current_game_summary(
+        game_id,
+    )
+
+
 def get_score_totals(
     game_id: int,
 ) -> dict[str, int]:
@@ -135,3 +202,17 @@ def get_score_totals(
     return repository_get_score_totals(
         game_id,
     )
+
+def get_dashboard_statistics() -> dict:
+    """
+    Return global statistics displayed on the dashboard.
+    """
+
+    return {
+        "games": get_games_count(),
+        "completed_games": get_completed_games_count(),
+        "active_games": get_active_games_count(),
+        "rounds": get_rounds_count(),
+        "cards": get_detected_cards_count(),
+        "average_score": get_average_round_score(),
+    }
