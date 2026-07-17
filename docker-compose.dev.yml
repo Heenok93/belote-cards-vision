@@ -1,7 +1,7 @@
 services:
   belote-app:
     build: .
-    container_name: belote-card-vision-dev
+    container_name: belote-cards-vision-dev
     ports:
       - "8501:8501"
     volumes:
