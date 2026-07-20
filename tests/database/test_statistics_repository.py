@@ -4,13 +4,10 @@ Tests for database statistics repository.
 
 from __future__ import annotations
 
-import sqlite3
 
-import pytest
 
 from src.database import repositories
 from src.database import statistics_repository
-from src.database.schema import initialize_schema
 
 
 # =============================================================================

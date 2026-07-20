@@ -4,12 +4,8 @@ Tests for database service.
 
 from __future__ import annotations
 
-import sqlite3
 
-import pytest
 
-from src.database import repositories
-from src.database.schema import initialize_schema
 from src.services import database_service
 
 def test_create_game(

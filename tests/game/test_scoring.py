@@ -1,3 +1,5 @@
+import pytest
+
 from src.game.belote.cards import Card, Suit, Value
 from src.game.belote.scoring import (
     TrumpMode,
@@ -97,7 +99,6 @@ def test_compute_score_with_belote_rebelote():
     # Roi (4) + Dame (3) + Belote (20)
     assert score == 27
 
-from src.game.belote.scoring import validate_total_score
 
 
 def test_validate_total_score():
@@ -115,7 +116,6 @@ def test_validate_total_score():
         trump_mode=TrumpMode.CLASSIC,
     )
 
-from src.game.belote.scoring import compute_team_scores
 
 
 def test_compute_team_scores():
@@ -140,9 +140,6 @@ def test_compute_team_scores():
 
     assert scores["team_1"] == 11
     assert scores["team_2"] == 10
-
-import pytest
-
 
 def test_get_card_points_requires_trump_suit():
     """
