@@ -1,4 +1,4 @@
--r requirements/requirements.txt
+-r requirements.txt
 
 #code linting and checks
 ruff
