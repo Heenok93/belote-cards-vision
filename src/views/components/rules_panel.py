@@ -64,6 +64,7 @@ def render_rules_panel() -> DetectionSettings:
             options=list(TrumpMode),
             format_func=lambda x: x.value,
         )
+        assert trump_mode is not None
 
         trump_suit = None
 

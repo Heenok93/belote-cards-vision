@@ -11,6 +11,7 @@ import sqlite3
 from datetime import datetime
 
 from config.settings import DATABASE_PATH
+from src import game
 
 
 # =============================================================================
@@ -61,7 +62,8 @@ def create_game(
             ),
         )
 
-        return cursor.lastrowid
+        assert cursor.lastrowid is not None
+        return cursor.lastrowid 
 
 
 def get_game(game_id: int) -> dict | None:
@@ -100,7 +102,11 @@ def get_current_game() -> dict:
         return dict(row)
 
     game_id = create_game()
-    return get_game(game_id)
+
+    game = get_game(game_id)
+    assert game is not None
+
+    return game
 
 
 def close_game(game_id: int) -> None:

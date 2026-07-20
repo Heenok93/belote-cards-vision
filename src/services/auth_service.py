@@ -5,6 +5,7 @@ Provides authentication helpers based on streamlit-authenticator.
 """
 
 from dataclasses import dataclass
+from unicodedata import name
 
 import streamlit as st
 import streamlit_authenticator as stauth
@@ -75,11 +76,16 @@ def get_authenticator() -> tuple[stauth.Authenticate, dict]:
 def _get_current_user() -> AuthenticatedUser:
     """Return the currently authenticated user."""
 
-    return AuthenticatedUser(
-        name=st.session_state.get("name"),
-        username=st.session_state.get("username"),
-    )
+    name = st.session_state.get("name")
+    username = st.session_state.get("username")
 
+    assert isinstance(name, str)
+    assert isinstance(username, str)
+
+    return AuthenticatedUser(
+        name=name,
+        username=username,
+    )
 
 def require_authentication() -> tuple[stauth.Authenticate, AuthenticatedUser]:
     """

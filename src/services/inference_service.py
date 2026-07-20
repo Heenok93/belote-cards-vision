@@ -1,6 +1,9 @@
 from pathlib import Path
 from tempfile import NamedTemporaryFile
+from typing import Any, cast
 import os
+
+from typing import Any, cast
 
 from ultralytics import YOLO
 
@@ -11,8 +14,15 @@ from config.settings import (
     DEFAULT_MODEL_PATH,
 )
 
-from src.game.belote.cards import Suit, parse_card
+from src.game.belote.cards import Card, Suit, parse_card
 from src.game.belote.scoring import TrumpMode, compute_score
+
+
+# =============================================================================
+# Types
+# =============================================================================
+
+Detection = dict[str, Any]
 
 
 # =============================================================================
@@ -44,10 +54,12 @@ def get_model(model_path: Path = DEFAULT_MODEL_PATH) -> YOLO:
 # Detection post-processing
 # =============================================================================
 
-def deduplicate_detections_by_label(detections: list[dict]) -> list[dict]:
+def deduplicate_detections_by_label(
+    detections: list[Detection],
+) -> list[Detection]:
     """Keep only the highest-confidence detection for each card label."""
 
-    best_by_label = {}
+    best_by_label: dict[str, Detection] = {}
 
     for detection in detections:
         label = detection["label"]
@@ -75,7 +87,7 @@ def analyze_image(
     image_size: int = DEFAULT_IMAGE_SIZE,
     iou: float = DEFAULT_IOU,
     deduplicate: bool = True,
-) -> dict:
+) -> dict[str, Any]:
     """Run YOLO inference and compute the Belote score."""
 
     model = get_model()
@@ -104,9 +116,14 @@ def analyze_image(
         result = results[0]
         names = model.names
 
-        detections = []
+        detections: list[Detection] = []
 
-        for box in result.boxes:
+        boxes = result.boxes
+
+        if boxes is None:
+            raise RuntimeError("Aucune boîte de détection retournée.")
+
+        for box in cast(list[Any], boxes):
             class_id = int(box.cls[0])
             score = float(box.conf[0])
             label = names[class_id]
@@ -134,7 +151,11 @@ def analyze_image(
         if deduplicate:
             detections = deduplicate_detections_by_label(detections)
 
-        cards = [d["card"] for d in detections if d["valid"]]
+        cards: list[Card] = []
+
+        for detection in detections:
+            if detection["valid"]:
+                cards.append(cast(Card, detection["card"]))
 
         score = compute_score(
             cards=cards,

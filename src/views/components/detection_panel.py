@@ -4,6 +4,8 @@ Detection panel.
 Runs YOLO inference and displays the detection results.
 """
 
+from typing import Any, cast
+
 import streamlit as st
 
 from src.services.inference_service import analyze_image
@@ -14,7 +16,7 @@ from src.views.components.rules_panel import DetectionSettings
 # Private helpers
 # =============================================================================
 
-def _get_score_value(score):
+def _get_score_value(score: Any) -> Any:
     """Return the numeric score."""
 
     if hasattr(score, "total"):
@@ -52,7 +54,7 @@ def _validate_card_count(n_cards: int) -> None:
         )
 
 
-def _render_detection_metrics(result: dict) -> None:
+def _render_detection_metrics(result: dict[str, Any]) -> None:
     """Display detection metrics."""
 
     col1, col2, col3 = st.columns(3)
@@ -89,7 +91,7 @@ def render_detection_panel(
     settings: DetectionSettings,
     preprocessing_used: bool,
     preprocessing_mode: str,
-) -> dict | None:
+) -> dict[str, Any] | None:
     """
     Run YOLO inference and display the detection results.
     """
@@ -111,7 +113,7 @@ def render_detection_panel(
                 "Analyse IA en cours..."
             ):
 
-                result = analyze_image(
+                analysis_result = analyze_image(
                     image_bytes=image_bytes,
                     trump_mode=settings.trump_mode,
                     trump_suit=settings.trump_suit,
@@ -123,24 +125,29 @@ def render_detection_panel(
                     deduplicate=settings.deduplicate,
                 )
 
-            st.session_state.analysis_result = result
+            st.session_state.analysis_result = analysis_result
             st.session_state.analysis_settings = settings
-
             st.session_state.analysis_preprocessing = {
                 "used": preprocessing_used,
                 "mode": preprocessing_mode,
             }
 
-        result = st.session_state.get("analysis_result")
+        stored_result  = cast(
+            dict[str, Any] | None,
+            st.session_state.get("analysis_result"),
+        )
 
-        if result is None:
+        if stored_result  is None:
             return None
-        
-        _render_detection_metrics(result)
 
-        preprocessing_info = st.session_state.get(
-            "analysis_preprocessing",
-            {},
+        _render_detection_metrics(stored_result)
+
+        preprocessing_info = cast(
+            dict[str, Any],
+            st.session_state.get(
+                "analysis_preprocessing",
+                {},
+            ),
         )
 
         if preprocessing_info.get("used"):
@@ -156,12 +163,12 @@ def render_detection_panel(
                 "Prétraitement utilisé : aucun"
             )
 
-        if "annotated_image" in result:
+        if "annotated_image" in stored_result :
 
             st.image(
-                result["annotated_image"],
+                stored_result ["annotated_image"],
                 caption="Cartes détectées par l'IA",
                 use_container_width=True,
             )
 
-        return result
+        return stored_result 

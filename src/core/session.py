@@ -3,9 +3,9 @@ Application session initialization.
 """
 
 import streamlit as st
+from typing import Any
 
-
-DEFAULT_SESSION = {
+DEFAULT_SESSION: dict[str, Any] = {
 
     # Authentication
     "authenticated": False,
