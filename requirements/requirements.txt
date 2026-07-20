@@ -6,7 +6,7 @@ streamlit
 PyYAML
 
 # Data processing
-ultralytics
+ultralytics==8.4.62
 pyyaml>=6.0
 pillow>=10.0.0
 opencv-python>=4.8.0

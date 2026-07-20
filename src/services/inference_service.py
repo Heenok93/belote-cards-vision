@@ -6,6 +6,7 @@ import os
 from typing import Any, cast
 
 from ultralytics import YOLO
+from ultralytics.engine.results import Results
 
 from config.settings import (
     DEFAULT_CONFIDENCE,
@@ -104,14 +105,17 @@ def analyze_image(
             tmp.write(image_bytes)
             image_path = tmp.name
 
-        results = model.predict(
-            source=image_path,
-            imgsz=image_size,
-            conf=confidence,
-            iou=iou,
-            save=False,
-            verbose=False,
-        )
+        results = cast(
+        list[Results],
+        model.predict(
+        source=image_path,
+        imgsz=image_size,
+        conf=confidence,
+        iou=iou,
+        save=False,
+        verbose=False,
+    ),
+)
 
         result = results[0]
         names = model.names

@@ -2,7 +2,7 @@
 
 #code linting and checks
 ruff
-mypy
+mypy==2.2.0
 pytest
 coverage
 pytest-cov
