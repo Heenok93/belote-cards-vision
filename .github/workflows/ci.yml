@@ -31,7 +31,7 @@ jobs:
         run: pip install -r requirements/requirements-dev.txt
 
       - name: Static analysis (Ruff)
-        run: ruff check src tests
+        run: ruff check . --fix
 
       - name: Type checking (MyPy)
         run: mypy src tests
