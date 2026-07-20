@@ -4,12 +4,20 @@ database/*.db
 src/database/*.db
 src/database/*.sqlite
 src/database/*.sqlite3
-models/
+
 archives/
-*.pt
+
+# Ignore all models by default
+models/*
 *.onnx
 *.engine
 *.torchscript
+
+# Keep the production model
+!models/vision/
+!models/vision/YOLO26_finetuned_best.pt
+!models/vision/*.csv
+!models/vision/*.png
 
 # Python
 __pycache__/

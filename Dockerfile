@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libgl1 \
     && rm -rf /var/lib/apt/lists/*
 
-COPY requirements.txt .
+COPY requirements/requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
@@ -22,7 +22,6 @@ COPY utils.py ./utils.py
 COPY src ./src
 COPY config ./config
 COPY models ./models
-
 COPY .streamlit ./.streamlit
 
 EXPOSE 8501
